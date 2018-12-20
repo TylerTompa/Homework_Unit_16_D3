@@ -14,7 +14,7 @@ var margin = {
     top: 20,
     right: 40,
     bottom: 60,
-    left: 50
+    left: 100
 };
 
 var width = svg_width - margin.left - margin.right;
@@ -28,13 +28,74 @@ shift the latter by left and top margins
 */
 
 var svg = d3
-  .select("body")
+  .select("#scatter")
   .append("svg")
   .attr("width", svg_width)
   .attr("height", svg_height);
 
-d3.csv("../../Data/data.csv", function() {
-    console.log("Found the csv file.");
+var chart_group = svg.append("g")
+  .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-}
+// Step 3: Import data from csv file
+
+// d3.csv("../../Data/data.csv", function(error, state_data) {
+//     if (error) throw error;
+//     console.log("Found the csv file.");
+
+// // Step 4: Parse and format data
+
+// state_data.forEach(function(data) {
+//     data.poverty = +data.poverty;
+//     data.povertyMoe = +data.povertyMoe;
+//     data.age = +data.age;
+//     data.ageMoe = +data.ageMoe;
+//     data.income = +data.incomeMoe;
+//     data.noHealthInsurance = +data.noHealthInsurance;
+//     data.obesity = +data.obesity;
+//     data.smokes = +data.smokes;
+//   });
+
+// }
+// )
+
+d3.csv("../../Data/data.csv").then(
+  function(state_data) {
+
+  state_data.forEach(
+    function(data) {
+      data.poverty = +data.poverty;
+      // data.povertyMoe = +data.povertyMoe;
+      // data.age = +data.age;
+      // data.ageMoe = +data.ageMoe;
+      // data.income = +data.incomeMoe;
+      data.noHealthInsurance = +data.noHealthInsurance;
+      // data.obesity = +data.obesity;
+      // data.smokes = +data.smokes;
+  });
+
+  // Step 5: Create scale functions
+  var x_linear_scale = d3.scaleLinear()
+    .domain([20, d3.max(state_data, d=> d.poverty)])
+    .range([0, width]);
+ 
+  var y_linear_scale = d3.scaleLinear()
+    .domain([0, d3.max(state_data, d => d.noHealthInsurance)])
+    .range([height, 0]);
+
+  // Step 6: Create axis functions
+  var bottom_axis = d3.axisBottom(x_linear_scale);
+  var left_axis = d3.axisLeft(y_linear_scale);
+
+  // Step 7: Append axes to chart
+  chart_group.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(bottom_axis);
+
+  chart_group.append("g")
+    .call(left_axis);
+
+    
+  }
 )
+
+
