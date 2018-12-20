@@ -104,6 +104,22 @@ d3.csv("../../Data/data.csv").then(
     .attr("r", "15")
     .attr("fill", "blue")
     .attr("opacity", "0.5")
+
+    // Step 9: Initialize tool Tip
+    var tool_tip = d3.tip()
+      .attr("class", "tooltip")
+      .offset([25, 0])
+      .html(function(d) {
+        return (`${d.abbr}`)
+      });
+
+    // Step 10: Create tool tip in chart
+    chart_group.call(tool_tip);
+
+    // Step 11: Create event listener to display and hide tooltip
+    circles_group.on("click", function(data) {
+      tool_tip.show(data, this);
+    })
     
   }
 )
