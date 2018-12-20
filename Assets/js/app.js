@@ -75,7 +75,7 @@ d3.csv("../../Data/data.csv").then(
 
   // Step 5: Create scale functions
   var x_linear_scale = d3.scaleLinear()
-    .domain([20, d3.max(state_data, d=> d.poverty)])
+    .domain([0, d3.max(state_data, d=> d.poverty)])
     .range([0, width]);
  
   var y_linear_scale = d3.scaleLinear()
@@ -94,6 +94,16 @@ d3.csv("../../Data/data.csv").then(
   chart_group.append("g")
     .call(left_axis);
 
+  // Step 8: Create circles
+  var circles_group = chart_group.selectAll("circle")
+    .data(state_data)
+    .enter()
+    .append("circle")
+    .attr("cx", d=> x_linear_scale(d.poverty))
+    .attr("cy", d => y_linear_scale(d.noHealthInsurance))
+    .attr("r", "15")
+    .attr("fill", "blue")
+    .attr("opacity", "0.5")
     
   }
 )
