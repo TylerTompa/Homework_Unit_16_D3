@@ -75,7 +75,7 @@ d3.csv("../../Data/data.csv").then(
 
   // Step 5: Create scale functions
   var x_linear_scale = d3.scaleLinear()
-    .domain([0, d3.max(state_data, d=> d.poverty)])
+    .domain([8, d3.max(state_data, d => d.poverty)])
     .range([0, width]);
  
   var y_linear_scale = d3.scaleLinear()
@@ -92,34 +92,76 @@ d3.csv("../../Data/data.csv").then(
     .call(bottom_axis);
 
   chart_group.append("g")
-    .call(left_axis);
+    .call(left_axis)
 
+  
   // Step 8: Create circles
   var circles_group = chart_group.selectAll("circle")
+  .data(state_data)
+  .enter()
+  .append("circle")
+  // .attr('class',function(d){return d.abbr})
+  // .append("text")
+  .attr("cx", d=> x_linear_scale(d.poverty))
+  .attr("cy", d => y_linear_scale(d.noHealthInsurance))
+  .attr("r", "15")
+  .attr("fill", "skyblue")
+  .attr("opacity", "0.5")
+  
+  // .attr(x="50")
+  // .attr(y="50")
+  // .html(d.abbr)
+  // var elem = svg.selectAll("circle")
+  
+    chart_group.selectAll("text")
     .data(state_data)
     .enter()
-    .append("circle")
-    .attr("cx", d=> x_linear_scale(d.poverty))
-    .attr("cy", d => y_linear_scale(d.noHealthInsurance))
-    .attr("r", "15")
-    .attr("fill", "blue")
-    .attr("opacity", "0.5")
+    .append("text")
+    .attr("x", d => x_linear_scale(d.poverty))
+    .attr("y", d => y_linear_scale(d.noHealthInsurance))
+    .text(
+        function(d) 
+        {return d.abbr}
+        )
+  
+  // Step 7: Append axes to chart
+  chart_group.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(bottom_axis);
+
+  chart_group.append("g")
+    .call(left_axis);
+
 
     // Step 9: Initialize tool Tip
-    var tool_tip = d3.tip()
-      .attr("class", "tooltip")
-      .offset([25, 0])
-      .html(function(d) {
-        return (`${d.abbr}`)
-      });
+    // var tool_tip = d3.tip()
+    //   .attr("class", "tooltip")
+    //   .offset([0, 0])
+    //   .html(function(d) {
+    //     return (`In poverty: ${d.poverty}<br>No insurance: ${d.noHealthInsurance}`)
+    //   });
 
     // Step 10: Create tool tip in chart
     chart_group.call(tool_tip);
 
     // Step 11: Create event listener to display and hide tooltip
-    circles_group.on("click", function(data) {
-      tool_tip.show(data, this);
-    })
+    // circles_group.on("click", function(data) {
+    //   tool_tip.show(data, this);
+    // })
+
+    // Step 12: Create axis labels
+    chart_group.append("text")
+    .attr("transform", `translate(${width/2}, ${height + margin.top + 30})`)
+    .attr("class", "axisText")
+    .text("Percent living in poverty")
+
+    chart_group.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left + 20)
+    .attr("x", -( 100 + (height/2)))
+    .attr("dy", "1em")
+    .attr("class", "axisText")
+    .text("Percent with no health insurance")
     
   }
 )
