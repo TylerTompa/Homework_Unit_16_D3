@@ -93,7 +93,6 @@ d3.csv("../../Data/data.csv").then(
 
   // chart_group.append("g")
   //   .call(left_axis)
-
   
   // Step 8: Create circles
   var circles_group = chart_group.selectAll("circle")
@@ -112,6 +111,7 @@ d3.csv("../../Data/data.csv").then(
   // .attr(y="50")
   // .html(d.abbr)
   // var elem = svg.selectAll("circle")
+
   
     chart_group.selectAll("text")
     .data(state_data)
@@ -142,7 +142,7 @@ d3.csv("../../Data/data.csv").then(
     //   });
 
     // Step 10: Create tool tip in chart
-    chart_group.call(tool_tip);
+    // chart_group.call(tool_tip);
 
     // Step 11: Create event listener to display and hide tooltip
     // circles_group.on("click", function(data) {
