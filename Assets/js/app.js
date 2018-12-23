@@ -87,12 +87,12 @@ d3.csv("../../Data/data.csv").then(
   var left_axis = d3.axisLeft(y_linear_scale);
 
   // Step 7: Append axes to chart
-  chart_group.append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(bottom_axis);
+  // chart_group.append("g")
+  //   .attr("transform", `translate(0, ${height})`)
+  //   .call(bottom_axis);
 
-  chart_group.append("g")
-    .call(left_axis)
+  // chart_group.append("g")
+  //   .call(left_axis)
 
   
   // Step 8: Create circles
