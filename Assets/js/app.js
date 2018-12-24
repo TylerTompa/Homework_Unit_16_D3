@@ -102,12 +102,13 @@ d3.csv("../../Data/data.csv").then(
   .attr("cx", d=> x_linear_scale(d.poverty))
   .attr("cy", d => y_linear_scale(d.noHealthInsurance))
   .attr("r", "15")
-  .attr("fill", "skyblue")
-  .attr("opacity", "0.4")
+  // .attr("fill", "skyblue")
+  // .attr("opacity", "0.4")
+  .attr("class", "stateCircle")
   // .attr("outline", "0.2")
    
   // Step 8: Before we append the state abbreviations into the circles, we define text offsets, which will move the text to the center of the circle.
-  var text_x_offset = -10;
+  var text_x_offset = 0;
   var text_y_offset = 5;
 
   // Step 9: Append state abbreviation into each circle
@@ -122,6 +123,7 @@ d3.csv("../../Data/data.csv").then(
       function(d) 
       {return d.abbr}
       )
+  .attr("class", "stateText")
   
   // Step 10: Append axes to chart
   chart_group.append("g")
