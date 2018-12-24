@@ -36,6 +36,8 @@ var svg = d3
 var chart_group = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+// IGNORE THIS.  I MIGHT COME BACK AND TRY THIS WAY AGAIN AT A LATER POINT. ////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Step 3: Import data from csv file
 
 // d3.csv("../../Data/data.csv", function(error, state_data) {
@@ -58,9 +60,13 @@ var chart_group = svg.append("g")
 // }
 // )
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Step 3: Import data from csv file
 d3.csv("../../Data/data.csv").then(
   function(state_data) {
 
+  // Step 4: Parse and format the data
   state_data.forEach(
     function(data) {
       data.poverty = +data.poverty;
@@ -85,16 +91,8 @@ d3.csv("../../Data/data.csv").then(
   // Step 6: Create axis functions
   var bottom_axis = d3.axisBottom(x_linear_scale);
   var left_axis = d3.axisLeft(y_linear_scale);
-
-  // Step 7: Append axes to chart
-  // chart_group.append("g")
-  //   .attr("transform", `translate(0, ${height})`)
-  //   .call(bottom_axis);
-
-  // chart_group.append("g")
-  //   .call(left_axis)
   
-  // Step 8: Create circles
+  // Step 7: Create and append data circles for each state
   var circles_group = chart_group.selectAll("circle")
   .data(state_data)
   .enter()
@@ -105,26 +103,27 @@ d3.csv("../../Data/data.csv").then(
   .attr("cy", d => y_linear_scale(d.noHealthInsurance))
   .attr("r", "15")
   .attr("fill", "skyblue")
-  .attr("opacity", "0.5")
-  
-  // .attr(x="50")
-  // .attr(y="50")
-  // .html(d.abbr)
-  // var elem = svg.selectAll("circle")
+  .attr("opacity", "0.4")
+  // .attr("outline", "0.2")
+   
+  // Step 8: Before we append the state abbreviations into the circles, we define text offsets, which will move the text to the center of the circle.
+  var text_x_offset = -10;
+  var text_y_offset = 5;
 
+  // Step 9: Append state abbreviation into each circle
+  chart_group.selectAll("text")
+  // .textYOffset = 5;
+  .data(state_data)
+  .enter()
+  .append("text")
+  .attr("x", d => x_linear_scale(d.poverty) + text_x_offset)
+  .attr("y", d => y_linear_scale(d.noHealthInsurance) + text_y_offset)
+  .text(
+      function(d) 
+      {return d.abbr}
+      )
   
-    chart_group.selectAll("text")
-    .data(state_data)
-    .enter()
-    .append("text")
-    .attr("x", d => x_linear_scale(d.poverty))
-    .attr("y", d => y_linear_scale(d.noHealthInsurance))
-    .text(
-        function(d) 
-        {return d.abbr}
-        )
-  
-  // Step 7: Append axes to chart
+  // Step 10: Append axes to chart
   chart_group.append("g")
     .attr("transform", `translate(0, ${height})`)
     .call(bottom_axis);
@@ -132,8 +131,10 @@ d3.csv("../../Data/data.csv").then(
   chart_group.append("g")
     .call(left_axis);
 
+  // IGNORE THIS SECTION.  I MIGHT COME BACK TO IT AT A LATER POINT. ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Step 9: Initialize tool Tip
+
+    // // Step 9: Initialize tool Tip
     // var tool_tip = d3.tip()
     //   .attr("class", "tooltip")
     //   .offset([0, 0])
@@ -141,15 +142,17 @@ d3.csv("../../Data/data.csv").then(
     //     return (`In poverty: ${d.poverty}<br>No insurance: ${d.noHealthInsurance}`)
     //   });
 
-    // Step 10: Create tool tip in chart
+    // // Step 10: Create tool tip in chart
     // chart_group.call(tool_tip);
 
-    // Step 11: Create event listener to display and hide tooltip
+    // // Step 11: Create event listener to display and hide tooltip
     // circles_group.on("click", function(data) {
     //   tool_tip.show(data, this);
     // })
 
-    // Step 12: Create axis labels
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Step 11: Create axis labels
     chart_group.append("text")
     .attr("transform", `translate(${width/2}, ${height + margin.top + 30})`)
     .attr("class", "axisText")
@@ -162,8 +165,5 @@ d3.csv("../../Data/data.csv").then(
     .attr("dy", "1em")
     .attr("class", "axisText")
     .text("Percent with no health insurance")
-    
   }
 )
-
-
